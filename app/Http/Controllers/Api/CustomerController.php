@@ -46,7 +46,15 @@ class CustomerController extends Controller
          $customer->email=$request->email;
          $customer->mobile=$request->mobile;
          $customer->address=$request->address;
-         $customer->photo=null;
+        
+          if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/customers'), $filename);
+            $customer->photo = $filename;
+        }
+
+
          $customer->save();
 
         //upload file

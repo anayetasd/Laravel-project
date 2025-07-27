@@ -11,7 +11,7 @@ class StockController extends Controller
      
     public function index()
     {
-        $stocks=Stock::all();
+        $stocks=Stock::with("product","warehouse","transaction_type")->get();
         return response()->json(["stocks"=>$stocks]);
     }
 
@@ -43,7 +43,7 @@ class StockController extends Controller
  
     public function show( $id)
     {
-          $stock=Stock::find($id);        
+          $stock=Stock::with("product","warehouse","transaction_type")->findOrFail($id);        
             return response()->json(["stock"=>$stock]);
 
     }

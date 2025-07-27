@@ -16,7 +16,7 @@ class EmployeeSalaryController extends Controller
     
     public function index()
     {
-          $employeesalarys=Employee_salary::all();
+          $employeesalarys=Employee_salary::with("administrator","payment")->get();
         return response()->json(["employeesalarys"=>$employeesalarys]);
     }
 
@@ -49,7 +49,7 @@ class EmployeeSalaryController extends Controller
    
     public function show(string $id)
     {
-          $employeesalary=Employee_salary::find($id);        
+          $employeesalary=Employee_salary::with("administrator","payment")->findOrFail($id);        
             return response()->json(["employeesalary"=>$employeesalary]);
     }
 

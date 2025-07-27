@@ -11,6 +11,8 @@ use App\Models\Purchases\Purchase;
 use App\Models\Purchases\PurchaseDetail;
 use App\Models\Inventory\Stock;
 use App\Models\Purchases\Supplier;
+use App\Models\Purchases\Warehouse;
+use App\Models\Product;
 use App\Libraries\Core\File;
 
 
@@ -19,14 +21,10 @@ class PurchasesController extends Controller
    
     public function index()
     {
-        $purchases=Purchase::all();
+        $purchases=Purchase::with("supplier")->get();
         return response()->json(["purchases"=>$purchases]);
     }
 
-    public function create()
-    {
-        
-    }
 
     public function store(Request $request)
     {
@@ -81,12 +79,13 @@ class PurchasesController extends Controller
       
     }
 
-    public function show( $id)
+    public function show($id)
     {
-          $purchases=Purchase::find($id);
+        $purchase = Purchase::with(['supplier', 'details.product'])->findOrFail($id);
 
-          $detail=PurchaseDetail::all();
-        return response()->json(["purchases"=>$purchases,"detail"=>$detail]);
+        return response()->json([
+            'purchase' => $purchase
+        ]);
     }
 
   
@@ -96,8 +95,6 @@ class PurchasesController extends Controller
     public function update(Request $request, $id)
     {
           $purchase=Purchase::find($id);
-
-         
        
         $purchase->supplier_id=$request->supplier_id;
         $purchase->purchase_date=$request->purchase_date;
@@ -113,29 +110,7 @@ class PurchasesController extends Controller
         $purchase->updated_at="2015-04-08";        
         $purchase->save();
 
-        $items=$request->items;
-
-          foreach($items as $item){
-            $details=new PurchaseDetail();
-            $details->purchase_id=$purchase->id;
-            $details->product_id=$item["product_id"];
-            $details->qty=$item["qty"];
-            $details->price=$item["price"];
-            $details->vat = $item["vat"] ?? 0;
-            $details->discount=$item["discount"];
-            $details->save();
-
-            $stock=new Stock();
-            $stock->product_id=$item["product_id"];
-            $stock->transaction_type_id=4;
-            $stock->qty=$item["qty"];       
-            $stock->remark="Purchase";  
-            $stock->warehouse_id=1;  
-            //$stock->timestamps = false;
-            $stock->save();
-
-          }
-
+      
          return response()->json([
             'message' => 'Purchases updated successfully'           
         ]);
@@ -144,13 +119,13 @@ class PurchasesController extends Controller
     }
     
      
-    function destroy(Request $Request){      
+    public function destroy($id)
+    {
+        $purchase = Purchase::findOrFail($id);
+        $purchase->delete();
 
-      $purchase=Purchase::find($id);
-      $purchase->delete();
-
-      return json_encode(["message"=>"Successfully Deleted"]);
-     
+        return response()->json(['message' => 'Successfully Deleted']);
     }
+
 
 }

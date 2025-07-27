@@ -19,6 +19,13 @@ use App\Http\Controllers\Api\SalesController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\EmployeeSalaryController;
 use App\Http\Controllers\Api\OrderDetailController;
+use App\Http\Controllers\Api\WarehouseController;
+use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\TransactiontypeController;
+use App\Http\Controllers\Api\EmployeeCategoryController;
+use App\Http\Controllers\Api\EmployeeShiftController;
+use App\Http\Controllers\Api\EmployeeAdministratorController;
+use App\Http\Controllers\Api\PaymentMethodController;
 
 // Authenticated user route
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -36,6 +43,7 @@ Route::get('/productcategorys/{id}/filter',[ProductCategoryController::class,'fi
 Route::get('/productcategorys',[ProductCategoryController::class,'index']);
 Route::get('/productUnits',[ProductUnitController::class,'index']);
 Route::get('/productsections',[ProductSectionController::class,'index']);
+Route::get('/mrs/last', [MoneyReceiptController::class, 'getLastMR']);
 
 // Route::post('/purchases', [PurchasesController::class, 'store']);
 
@@ -56,6 +64,13 @@ Route::apiResources([
     'sales' => SalesController::class,
     'employees' => EmployeeController::class,
     'employeesalarys' => EmployeeSalaryController::class,
+    'warehouses' => WarehouseController::class,
+    'companies' => CompanyController::class,
+    'transaction_types' => TransactiontypeController::class,
+    'employeecategories' => EmployeeCategoryController::class,
+    'employeeshifts' => EmployeeCategoryController::class,
+    'administrators' => EmployeeAdministratorController::class,
+    'paymentmethods' => PaymentMethodController::class,
     
 ]);
 

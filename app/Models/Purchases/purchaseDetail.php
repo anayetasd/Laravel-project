@@ -17,8 +17,10 @@ class purchaseDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
-    public function purchases()
+    public function details()
     {
         return $this->belongsTo(Purchase::class);
     }
+
+    
 }

@@ -9,22 +9,19 @@ class ProductionController extends Controller
 {
     public function index()
     {
-        $productions=Production::all();
+        $productions=Production::with("product","rawMaterial")->get();
         return response()->json(["productions"=>$productions]);
         
     }
 
-
-
-  
     public function store(Request $request)
     {
          $production=new Production();
       
-         $production->production_date="2024-08-09";
+         $production->production_date=$request->production_date;
          $production->product_id=$request->product_id;
              
-         $production->raw_material_id=1;
+         $production->raw_material_id=$request->raw_material_id;
          $production->quantity_produced=$request->quantity_produced;
          $production->unit=$request->unit;
          $production->production_cost=$request->production_cost;
@@ -52,10 +49,10 @@ class ProductionController extends Controller
     {
           $production=production::find($id);
 
-          $production->production_date="2024-08-09";
+          $production->production_date=$request->production_date;
          $production->product_id=$request->product_id;
              
-         $production->raw_material_id=1;
+         $production->raw_material_id=$request->raw_material_id;
          $production->quantity_produced=$request->quantity_produced;
          $production->unit=$request->unit;
          $production->production_cost=$request->production_cost;

@@ -13,6 +13,7 @@ class ProductController extends Controller
     {    
 
         $products=Product::all();
+
          return response()->json(["products"=>$products]);
     }
 
@@ -22,12 +23,12 @@ class ProductController extends Controller
         
           $product=new Product();
 
-        $product->offer_price="2024-08-09";
+        $product->offer_price=$request->offer_price; 
          $product->name=$request->name; 
          $product->manufacturer_id=1;
          $product->regular_price=$request->regular_price;
          $product->description=$request->description;
-         $product->photo=Null;
+        //  $product->photo=$request->photo;
          $product->product_category_id=1;
          $product->product_section_id=1;
          $product->is_featured=Null;
@@ -39,14 +40,24 @@ class ProductController extends Controller
          $product->barcode=$request->barcode;
          $product->product_type_id=1;
          $product->product_unit_id=1;
-         
-         $product->save();
 
+                if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/products'), $filename);
+            $product->photo = $filename;
+        }
+
+          $product->save();
 
         return response()->json([
             'message' => 'Stock saved successfully'           
         ]);
+
     }
+    
+       
+    
 
 
     public function show(string $id)

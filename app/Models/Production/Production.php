@@ -13,9 +13,24 @@ class Production extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function rawMaterial(){
-        return $this->belongsTo(RawMaterial::class);
+    public function rawMaterial()
+    {
+    return $this->belongsTo(RawMaterial::class, 'raw_material_id');
     }
 
      public $timestamps = false;
+
+     
+
+            protected $fillable = [
+            'production_date',
+            'product_id',
+            'raw_material_id',
+            'raw_material_qty',
+            'unit',
+            'quantity_produced',
+            'production_cost',
+            'name',
+            ];
+
 }

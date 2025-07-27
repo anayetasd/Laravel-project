@@ -16,24 +16,17 @@ class MoneyReceiptController extends Controller
     
     public function index()
     {
-        $mrs=MR::all();
-        return response()->json(["mrs"=>$mrs]);
+        $mrs = MR::with(['customer', 'mrDetails.product'])->get();
+        return response()->json(["mrs" => $mrs]);
     }
 
 
-    public function create()
-        {
-            return response()->json([
-                'company' => Company::first(),
-                'customers' => Customer::all(),
-            
-                'products' => Product::select('id', 'product_name')->get(),
-                'last_id' => MR::max('id') ?? 0
-            ]);
-}
+    public function getLastMR() 
+    {
+            $last = MR::latest()->first();
+            return response()->json($last ? $last->id : 0);
+        }
 
-
-  
     public function store(Request $request)
     {
          $mr=new MR();
@@ -66,8 +59,9 @@ class MoneyReceiptController extends Controller
 
     public function show(string $id)
     {
-        $mr=MR::find($id);
-         return response()->json(["mr"=>$mr]);
+        $mr = MR::with(['customer', 'mrDetails.product'])->findOrFail($id);
+
+        return response()->json(["mr" => $mr]);
     }
 
    
@@ -89,7 +83,7 @@ class MoneyReceiptController extends Controller
     }
 
 
-        public function destroy(string $id)
+    public function destroy(string $id)
     {
         $mr = MR::findOrFail($id); 
         $mr->delete();
@@ -98,3 +92,7 @@ class MoneyReceiptController extends Controller
     }
 
 }
+
+
+
+

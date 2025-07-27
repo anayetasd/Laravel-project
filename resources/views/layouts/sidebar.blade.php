@@ -220,11 +220,22 @@
 
                             
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10" aria-controls="submenu-10"><i class="fas fa-certificate"></i>Logout</a>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" href="{{ route('logout') }}" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10" aria-controls="submenu-10"><i class="fas fa-certificate"></i>Logout</a>
                                 
-                            </li>
-                            
+                            </li> -->
+
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                            @csrf
+                        </form>
+
+                        <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-certificate" ></i>
+                            Logout
+                        </a>
+
+
+
                         </ul>
                     </div>
                 </nav>

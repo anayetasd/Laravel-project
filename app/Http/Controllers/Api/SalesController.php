@@ -17,7 +17,7 @@ class SalesController extends Controller
    
     public function index()
     {
-        $sales=Sale::all();
+        $sales=Sale::with("customer")->get();
         return response()->json(["sales"=>$sales]);
     }
 

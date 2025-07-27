@@ -19,9 +19,9 @@ class Order extends Model
     return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-  public function orderDetails() {
-    return $this->hasMany(OrderDetail::class);
-}
+    public function orderDetails() {
+        return $this->hasMany(OrderDetail::class);
+    }
 
      public $timestamps = false;
 

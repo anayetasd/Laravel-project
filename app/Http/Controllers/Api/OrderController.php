@@ -20,7 +20,7 @@ class OrderController extends Controller
    
     public function index()
     {
-         $orders=Order::all();
+         $orders=Order::with(['customer'])->get();
         return response()->json(["orders"=>$orders]);
     }
 
@@ -37,7 +37,7 @@ class OrderController extends Controller
         $order->shipping_address=$request->shipping_address; 
         $order->order_total=$request->order_total;
         $order->paid_amount=$request->paid_amount;
-        $order->remark=1;
+        $order->remark = $request->remark ?? 
         $order->status_id="294394";
         $order->discount=$request->discount;
         $order->vat=1;
@@ -60,7 +60,7 @@ class OrderController extends Controller
             $stock=new Stock();
             $stock->product_id=$item["product_id"];
             $stock->transaction_type_id=1;
-            $stock->qty -=$item["qty"];       
+            $stock->qty = -$item["qty"];       
             $stock->remark="Sales";  
             $stock->warehouse_id=1;  
             //$stock->timestamps = false;
@@ -92,7 +92,7 @@ class OrderController extends Controller
    
     public function update(Request $request, string $id)
     {
-        $orders=Order::find($id); 
+        $order=Order::find($id); 
 
         $order->customer_id=$request->customer_id;
         $order->order_date=$request->order_date;
@@ -100,7 +100,7 @@ class OrderController extends Controller
         $order->shipping_address=$request->shipping_address; 
         $order->order_total=$request->order_total;
         $order->paid_amount=$request->paid_amount;
-        $order->remark=1;
+        $order->remark="Sales";
         $order->status_id="294394";
         $order->discount=$request->discount;
         $order->vat=1;
