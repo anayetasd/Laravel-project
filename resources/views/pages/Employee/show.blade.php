@@ -122,6 +122,13 @@
             <td>Address</td>
             <td>{{ $employee->address }}</td>
         </tr>
+        <tr>
+            <td>Photo</td>
+            <td>
+                <img src="{{ url('/img/' . $employee->photo) }}" alt="{{ $employee->name }}" style="height: 200px; border-radius: 6px;">
+            </td>
+        </tr>
+
     </table>
 </div>
 

@@ -256,63 +256,65 @@
         });
 
         document.getElementById("btnProcessOrder").addEventListener("click", function () {
-          if (cart.length === 0) {
-            alert("Kono item nai cart e");
-            return;
-          }
-
-          let subtotal = parseFloat(document.getElementById("net-total").innerText) || 0;
-
-          
-
-          let data = {
-            customer_id: document.querySelector("select[name='customer']").value,
-            order_date: document.getElementById("txtOrderDate").value,
-            delivery_date: document.getElementById("txtDueDate").value,
-            shipping_address: document.getElementById("txtShippingAddress").value,
-            remark: document.getElementById("txtRemark").value,
-            order_total: subtotal,
-            paid_amount: subtotal,
-            discount: 0,
-            vat: 0,
-            items: cart.map(item => ({
-            product_id: item.product_id,
-            qty: item.qty,
-            price: item.price,
-            vat: item.vat || 0,
-            discount: item.discount
-            }))
-          };
-
-          fetch("http://localhost/laravel12/project_app/public/api/orders", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: JSON.stringify(data)
-          })
-            .then(async res => {
-              const text = await res.text();
-              console.log("🔍 RAW response:", text);
-              try {
-                const json = JSON.parse(text);
-                if (json.msg === "Success") {
-                  alert("Order ID " + json.id + " saved.");
-                  cart = [];
-                  refreshTable();
-                } else {
-                  alert("API Error: " + (json.error || JSON.stringify(json)));
+                if (cart.length === 0) {
+                  alert("Kono item nai cart e");
+                  return;
                 }
-              } catch (e) {
-                console.error("❌ JSON parse failed!", e);
-                alert("Invalid JSON from API");
-              }
-            })
-            .catch(err => {
-              alert("Failed to connect to API.");
-              console.error(err);
-            });
+
+                let subtotal = parseFloat(document.getElementById("net-total").innerText) || 0;
+
+                
+
+                let data = {
+                  customer_id: document.querySelector("select[name='customer']").value,
+                  order_date: document.getElementById("txtOrderDate").value,
+                  delivery_date: document.getElementById("txtDueDate").value,
+                  shipping_address: document.getElementById("txtShippingAddress").value,
+                  remark: document.getElementById("txtRemark").value,
+                  order_total: subtotal,
+                  paid_amount: subtotal,
+                  discount: 0,
+                  vat: 0,
+                  items: cart.map(item => ({
+                  product_id: item.product_id,
+                  qty: item.qty,
+                  price: item.price,
+                  vat: item.vat || 0,
+                  discount: item.discount
+                  }))
+                };
+
+                fetch("http://localhost/laravel12/project_app/public/api/orders", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                  },
+                  body: JSON.stringify(data)
+                })
+                    .then(async res => {
+                      const text = await res.text();
+                      console.log("🔍 RAW response:", text);
+                      try {
+                        const json = JSON.parse(text);
+                        if (json.msg === "Success") {
+                          alert("Order ID " + json.id + " saved.");
+                          cart = [];
+                          refreshTable();
+                        } else {
+                          alert("API Error: " + (json.error || JSON.stringify(json)));
+                        }
+                      } catch (e) {
+                        console.error("❌ JSON parse failed!", e);
+                        alert("Invalid JSON from API");
+                      }
+                    })
+
+
+                    .catch(err => {
+                      alert("Failed to connect to API.");
+                      console.error(err);
+                    });
 
         });
 </script>

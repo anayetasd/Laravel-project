@@ -102,7 +102,7 @@ class EmployeeSalaryController extends Controller
        $employeesalary = Employee_salary::find($id);      
         return view("pages.Employee_salary.confirm", ["employeesalary"=>$employeesalary]);
     }
-    function destroy(EmployeeSalary $employeesalary){
+    function destroy(Employee_salary $employeesalary){
         $employeesalary->delete();
         return redirect("employeesalarys");
     }

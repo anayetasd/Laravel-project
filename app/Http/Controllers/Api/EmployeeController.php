@@ -72,6 +72,13 @@ class EmployeeController extends Controller
         $employee->email="N/A";
         $employee->address=$request->address;
 
+        if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $file->move(public_path('uploads/employees'), $filename);
+        $employee->photo = $filename;
+    }
+
         $employee->save();
 
          return response()->json([

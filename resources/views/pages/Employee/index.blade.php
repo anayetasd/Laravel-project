@@ -126,7 +126,7 @@
                         <td>{{ $employee->joining_date }}</td>
                         <td>
                             @if ($employee->photo)
-                                <img src="{{ asset('uploads/employees/' . $employee->photo) }}" alt="photo">
+                                <img src="{{ asset('img/' . $employee->photo) }}" alt="photo">
                             @else
                                 <span class="text-muted">No Photo</span>
                             @endif

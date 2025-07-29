@@ -13,11 +13,7 @@
 
         body {
             height: 100vh;
-<<<<<<< HEAD
             background: url("{{ asset('assets/images/mill_2.jpg') }}") no-repeat center center fixed;
-=======
-            background: url("{{ asset('assets/images/mill_10.jpg') }}") no-repeat center center fixed;
->>>>>>> 66491b0d11935c2e5cc16f765e63eba77b04b914
             background-size: cover;
             display: flex;
             align-items: center;

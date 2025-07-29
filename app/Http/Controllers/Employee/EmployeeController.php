@@ -80,38 +80,45 @@ class EmployeeController extends Controller
 
 
   
-    public function update(Request $request,$id)
-    {
-         $employee=new Employee();
-        $employee->employeeshift_id=$request->employeeshift_id;
-        $employee->employee_categorie_id=$request->employee_categorie_id;
-        $employee->joining_date=$request->joining_date;
-        $employee->name=$request->name;
-        $employee->father_name="N/A";
-        $employee->mother_name="N/A";
-        $employee->nid="1";
-        $employee->gender="Male";
-        $employee->dob="2002-07-06";
-        $employee->photo=$request->photo;
-        $employee->qualification="MBA";
-        $employee->phone_number=$request->phone_number;
-        $employee->email="N/A";
-        $employee->address=$request->address;
+    public function update(Request $request, $id)
+{
+    // পুরানো রেকর্ড আনা
+    $employee = Employee::findOrFail($id);
 
-        $employee->save();
+    // নতুন ডাটা গুলো সেট করা
+    $employee->employeeshift_id = $request->employeeshift_id;
+    $employee->employee_categorie_id = $request->employee_categorie_id;
+    $employee->joining_date = $request->joining_date;
+    $employee->name = $request->name;
+    $employee->father_name = "N/A";
+    $employee->mother_name = "N/A";
+    $employee->nid = "1";
+    $employee->gender = "Male";
+    $employee->dob = "2002-07-06";
+    $employee->qualification = "MBA";
+    $employee->phone_number = $request->phone_number;
+    $employee->email = "N/A";
+    $employee->address = $request->address;
 
-        if($request->hasFile('photo')){
-            //upload file
-			$imageName=$employee->id.'.'.$request->photo->extension();			
-			$request->photo->move(public_path('img'),$imageName);
+  
+    if ($request->hasFile('photo')) {
+      
+        if ($employee->photo && file_exists(public_path('img/' . $employee->photo))) {
+            unlink(public_path('img/' . $employee->photo));
+        }
+        $file = $request->file('photo');
+        $imageName = time() . '.' . $file->extension();
+        $file->move(public_path('img'), $imageName);
 
-            
-            $employee->photo=$imageName;
-			$employee->save();
-		}
-
-        return redirect("employees");
+        $employee->photo = $imageName;
     }
+
+
+    $employee->save();
+
+    return redirect('employees')->with('success', 'Employee Updated Successfully');
+}
+
 
    function confirm($id){
         $employee=Employee::find($id);
